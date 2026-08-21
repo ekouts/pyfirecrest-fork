@@ -204,3 +204,24 @@ class UserId(TypedDict):
     user: Id
     group: Id
     groups: list[Id]
+
+
+class GroupInfo(Id):
+    """A group record with a default flag, from `status/{system}/userinfo`"""
+
+    default: bool
+
+
+class AccountInfo(TypedDict):
+    """An account record, from `status/{system}/userinfo`"""
+
+    name: str
+    default: bool
+
+
+class UserInfo(TypedDict):
+    """A user information record, from `status/{system}/userinfo`"""
+
+    user: Id
+    groups: list[GroupInfo]
+    accounts: list[AccountInfo]

@@ -220,9 +220,17 @@ def id(
             json_out(result)
         else:
             user = f"{result['user']['id']}({result['user']['name']})"
-            group = f"{result['group']['id']}({result['group']['name']})"
-            all_groups = ",".join([f"{g['id']}({g['name']})" for g in result["groups"]])
-            console.print(f"uid={user} gid={group} groups={all_groups}")
+            default_groups = [g for g in result["groups"] if g.get("default")]
+            groups = result["groups"]
+            if default_groups:
+                group = default_groups[0]
+            elif groups:
+                group = groups[0]
+            else:
+                group = None
+            group_str = f"{group['id']}({group['name']})" if group else ""
+            all_groups = ",".join([f"{g['id']}({g['name']})" for g in groups])
+            console.print(f"uid={user} gid={group_str} groups={all_groups}")
     except Exception as e:
         examine_exeption(e)
         raise typer.Exit(code=1)
