@@ -5,7 +5,7 @@ See also: https://firecrest-api.cscs.ch
 from __future__ import annotations
 
 import sys
-from typing import Any
+from typing import Any, Optional
 
 if sys.version_info >= (3, 8):
     from typing import TypedDict
@@ -220,8 +220,12 @@ class AccountInfo(TypedDict):
 
 
 class UserInfo(TypedDict):
-    """A user information record, from `status/{system}/userinfo`"""
+    """A user information record, from `status/{system}/userinfo`
+
+    `accounts` is `None` when the system's scheduler does not report
+    accounts (e.g. PBS) or the user has no associations.
+    """
 
     user: Id
     groups: list[GroupInfo]
-    accounts: list[AccountInfo]
+    accounts: Optional[list[AccountInfo]]

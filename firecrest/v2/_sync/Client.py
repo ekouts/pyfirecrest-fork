@@ -22,6 +22,8 @@ from packaging.version import InvalidVersion, Version, parse
 from streamer import streamer_client as cli
 from typing import Any, BinaryIO, List, Optional
 
+import firecrest.types as t
+
 from firecrest.tracing import current_correlation_id, ensure_correlation_id
 from firecrest.utilities import (
     parse_retry_after,
@@ -875,9 +877,14 @@ class Firecrest:
     def userinfo(
         self,
         system_name: str
-    ) -> dict:
-        """Returns user and groups information.
+    ) -> t.UserInfo:
+        """Returns user, groups and accounts information.
 
+        The ``accounts`` field and the ``default`` flag of the groups
+        require version 2.6.0 of the API. Older versions return the
+        primary group in a top-level ``group`` field instead.
+
+        :param system_name: the system name
         :calls: GET `/status/{system_name}/userinfo`
         """
         resp = self._get_request(
